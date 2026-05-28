@@ -5,9 +5,10 @@ require('dotenv').config();
 const authRoutes = require('./routes/authRoutes');
 const itemRoutes = require('./routes/itemRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
-const paymentRoutes = require('./routes/paymentRoutes');
-const paymentRoutesAlt = require('./routes/payment.routes');
+const orderRoutes = require('./routes/orderRoutes');
 const app = express();
+app.disable('x-powered-by');
+
 // CORS for Angular
 app.use(cors({
     origin: process.env.CORS_ORIGIN || 'http://localhost:4200',
@@ -22,7 +23,6 @@ app.use(express.urlencoded({ limit: '999999mb', extended: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/items', itemRoutes);
-app.use('/api/payments', paymentRoutes);
-app.use('/payment', paymentRoutesAlt);
+app.use('/api/orders', orderRoutes);
 
 module.exports = app;
