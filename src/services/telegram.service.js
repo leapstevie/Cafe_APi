@@ -44,6 +44,15 @@ async function sendTelegram(message) {
   }
 }
 
+async function sendWelcomeMessage(chatId) {
+  await postToTelegram('sendMessage', {
+    chat_id: chatId,
+    text: [
+      'hi Welcome !',
+    ].join('\n')
+  });
+}
+
 async function sendMiniAppStartButton(chatId) {
   const miniAppUrl = process.env.TELEGRAM_MINI_APP_URL;
 
@@ -65,6 +74,10 @@ async function sendMiniAppStartButton(chatId) {
       ]]
     }
   });
+}
+
+function isStartCommand(text) {
+  return /^\/start(?:@[\w_]+)?(?:\s.*)?$/i.test(text);
 }
 
 async function getWebhookInfo() {
@@ -112,7 +125,8 @@ async function handleTelegramUpdate(update) {
     return;
   }
 
-  if (text === '/start' || text.startsWith('/start ')) {
+  if (isStartCommand(text)) {
+    await sendWelcomeMessage(chatId);
     await sendMiniAppStartButton(chatId);
   }
 }
