@@ -3,8 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 class AuthService {
-    // Register new user
-    static async register(username, email, password) {
+    static async createUser(username, email, password) {
         // Check if user already exists
         const existingUserByEmail = await User.findByEmail(email);
         if (existingUserByEmail) {
@@ -22,14 +21,19 @@ class AuthService {
         // Create user
         const userId = await User.create(username, email, hashedPassword);
 
+        // Get user info (without password)
+        return User.findById(userId);
+    }
+
+    // Register new user
+    static async register(username, email, password) {
+        const user = await this.createUser(username, email, password);
+
         // Generate JWT token
-        const token = this.generateToken(userId);
+        const token = this.generateToken(user.id);
 
         // Save token to database
-        await User.saveAccessToken(userId, token);
-
-        // Get user info (without password)
-        const user = await User.findById(userId);
+        await User.saveAccessToken(user.id, token);
 
         return { user, token };
     }

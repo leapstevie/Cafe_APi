@@ -25,7 +25,9 @@ const verifyToken = async (req, res, next) => {
         // Attach user info to request
         req.user = {
             userId: decoded.userId,
-            token: token
+            token: token,
+            username: user.username,
+            email: user.email
         };
 
         next();
@@ -42,7 +44,18 @@ const requireAuth = (req, res, next) => {
     verifyToken(req, res, next);
 };
 
+const requireAdmin = (req, res, next) => {
+    const adminEmail = process.env.ADMIN_EMAIL || 'admin@gmail.com';
+
+    if (req.user?.email !== adminEmail) {
+        return res.status(403).json({ error: 'Admin access required' });
+    }
+
+    next();
+};
+
 module.exports = {
     verifyToken,
-    requireAuth
+    requireAuth,
+    requireAdmin
 };

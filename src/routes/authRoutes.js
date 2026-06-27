@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const AuthController = require('../controllers/authController');
-const { requireAuth } = require('../middleware/authMiddleware');
+const { requireAuth, requireAdmin } = require('../middleware/authMiddleware');
 
-// POST /api/auth/register - Register new user
-router.post('/register', AuthController.register);
+// POST /api/auth/register - Admin only user creation
+router.post('/register', requireAuth, requireAdmin, AuthController.register);
 
 // POST /api/auth/login - User login
 router.post('/login', AuthController.login);
