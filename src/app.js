@@ -6,6 +6,7 @@ const authRoutes = require('./routes/authRoutes');
 const itemRoutes = require('./routes/itemRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const orderRoutes = require('./routes/orderRoutes');
+const telegramRoutes = require('./routes/telegramRoutes');
 const app = express();
 app.disable('x-powered-by');
 
@@ -24,5 +25,6 @@ app.use('/api/auth', authRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/items', itemRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/telegram', telegramRoutes);
 
 module.exports = app;
